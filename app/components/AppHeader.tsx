@@ -21,7 +21,7 @@ const AppHeader = forwardRef<HTMLDivElement, AppHeaderProps>(
         <Group gap={4}>
           <Button
             component={Link}
-            href={logoHref ?? routes.landing.show.path()}
+            href={logoHref ?? routes.home.redirect.path()}
             variant="subtle"
             size="compact-md"
             leftSection="🗞️"

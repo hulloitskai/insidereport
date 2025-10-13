@@ -11,7 +11,7 @@ const TestForm: FC = () => {
     descriptor: "submit test form",
     initialValues: {
       name: "",
-      birthday: "",
+      birthday: null as string | null,
     },
     transformValues: values => ({
       model: values,

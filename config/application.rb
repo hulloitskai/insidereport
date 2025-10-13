@@ -30,6 +30,7 @@ module DailyData
     require "premailer_ext"
     require "friendly_id_ext"
     require "email_validator_ext"
+    require "devise_ext"
 
     # == Libraries
     require "inflections"
@@ -39,9 +40,6 @@ module DailyData
     require "clarity"
     require "amplitude"
     require "contact"
-    require "service_worker_proxy"
-    require "overpowered"
-    require "canny"
 
     # == Configuration
     # Initialize configuration defaults for originally generated Rails version.

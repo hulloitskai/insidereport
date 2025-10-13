@@ -8369,6 +8369,7 @@ class ActiveRecord::Base
   extend ::ActiveRecord::Suppressor::ClassMethods
   extend ::ActiveRecord::Normalization::ClassMethods
   extend ::CounterCulture::Extensions::ClassMethods
+  extend ::OrmAdapter::ToAdapter
 
   # source://activerecord//lib/active_record/base.rb#283
   def __callbacks; end
@@ -42511,7 +42512,7 @@ class ActiveRecord::Validations::UniquenessValidator < ::ActiveModel::EachValida
   def initialize(options); end
 
   # source://activerecord//lib/active_record/validations/uniqueness.rb#20
-  def validate_each(record, name, value); end
+  def validate_each(record, attribute, value); end
 
   private
 

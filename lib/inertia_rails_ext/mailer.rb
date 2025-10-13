@@ -68,12 +68,10 @@ module InertiaRails
         nil,
         method(:render),
         props:,
-        view_data: nil,
+        view_data: {},
       )
       ViteRuby.without_dev_server do
-        ViteRuby.without_auto_build do
-          renderer.render
-        end
+        renderer.render
       end
     rescue => error
       raise "Failed to render email with Inertia: #{error}"

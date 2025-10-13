@@ -1,3 +1,5 @@
+# rubocop:disable Layout/LineLength
+# typed: true
 # frozen_string_literal: true
 
 class AddJobsFinishedAtToGoodJobBatches < ActiveRecord::Migration[8.0]

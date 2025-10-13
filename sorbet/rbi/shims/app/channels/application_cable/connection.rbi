@@ -1,3 +1,3 @@
-# typed: strong
+# typed: true
 
 class ApplicationCable::Connection; end

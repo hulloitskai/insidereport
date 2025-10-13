@@ -25,12 +25,6 @@
     &:focus {
       border-color: var(--mantine-color-primary-outline);
     }
-
-    &:not(:focus) {
-      @mixin dark-user-theme {
-        border-color: alpha(var(--mantine-color-white), 0.2);
-      }
-    }
   }
 
   :global(.epr-category-nav) {

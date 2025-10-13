@@ -19,6 +19,7 @@ export { default as InvitationIcon } from "~icons/heroicons/envelope-20-solid";
 export { default as AlertIcon } from "~icons/heroicons/exclamation-triangle-20-solid";
 export { default as EmojiIcon } from "~icons/heroicons/face-smile-20-solid";
 export { default as PublicIcon } from "~icons/heroicons/globe-alt-20-solid";
+export { default as HomeIcon } from "~icons/heroicons/home-20-solid";
 export { default as AdminIcon } from "~icons/heroicons/key-20-solid";
 export { default as SearchIcon } from "~icons/heroicons/magnifying-glass-20-solid";
 export { default as RemoveIcon } from "~icons/heroicons/minus-circle-20-solid";

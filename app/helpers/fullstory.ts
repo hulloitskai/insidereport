@@ -1,5 +1,5 @@
 import { type SnippetOptions } from "@fullstory/browser";
-import { init } from "@fullstory/browser";
+import { init as initFullStory } from "@fullstory/browser";
 
 import { getMeta } from "~/helpers/meta";
 
@@ -11,7 +11,7 @@ export const setupFullStory = (): void => {
       devMode: import.meta.env.RAILS_ENV === "development",
       debug: true,
     };
-    init(options);
+    initFullStory(options);
     console.info("Initialized FullStory", options);
   } else {
     console.warn("Missing FullStory org ID; skipping initialization");

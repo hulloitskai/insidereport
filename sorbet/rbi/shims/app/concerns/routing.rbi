@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 module Routing
   include GeneratedUrlHelpersModule

@@ -8,11 +8,11 @@
   height: calc(
     var(--app-shell-header-height) + var(--safe-area-inset-top, 0px)
   );
-  padding-top: var(--safe-area-inset-top, 0px);
-  position: sticky;
+  /* padding-top: var(--safe-area-inset-top, 0px);
+  position: sticky; */
 }
 
-.footer {
+/* .footer {
   height: calc(
     var(--app-shell-footer-height) + var(--safe-area-inset-bottom, 0px)
   );
@@ -24,27 +24,23 @@
   &[data-with-border] {
     border-top: rem(1px) solid var(--app-shell-border-color);
   }
-}
+} */
 
 .main {
-  --app-shell-footer-offset: var(--app-shell-footer-height, 0px);
+  /* --app-shell-footer-offset: var(--app-shell-footer-height, 0px); */
 
   flex-grow: 1;
   background-color: var(--mantine-color-body);
   display: flex;
   flex-direction: column;
   align-items: stretch;
-  margin-top: max(var(--safe-area-inset-top, 0px), var(--mantine-spacing-sm));
-  min-height: calc(
+  /* margin-top: max(var(--safe-area-inset-top, 0px), var(--mantine-spacing-sm)); */
+  /* min-height: calc(
     100vh - var(--safe-area-inset-top, 0px) -
       (var(--app-shell-footer-height, 0px) + var(--safe-area-inset-bottom, 0px))
-  );
-  padding-top: var(--app-shell-padding);
-  padding-bottom: 0px;
-
-  :where([data-user-theme]) & {
-    background: none;
-  }
+  ); */
+  /* padding-top: var(--app-shell-padding);
+  padding-bottom: 0px; */
 }
 
 .breadcrumb {

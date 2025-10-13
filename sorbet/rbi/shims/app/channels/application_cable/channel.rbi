@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 class ApplicationCable::Channel
   sig { returns(ApplicationCable::Connection) }

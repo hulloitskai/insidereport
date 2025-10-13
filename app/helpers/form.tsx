@@ -145,7 +145,7 @@ const NO_BODY_METHODS: Method[] = [
 export const useForm = <
   Data extends Record<string, any> & { error?: never; errors?: never } = {},
   Values extends Record<string, any> = {},
-  TransformValues extends _TransformValues<Values> = (values: Values) => Values,
+  TransformValues extends _TransformValues<Values> = (values: Values) => any,
 >(
   options: FormParams<Data, Values, TransformValues>,
 ): FormHelper<Data, Values, TransformValues> => {

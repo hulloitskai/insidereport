@@ -1,0 +1,18 @@
+# Cursor Rules
+
+## Routes and TypeScript Helpers
+
+- Use `export: true` or `export: { namespace: "..." }` on routes that should be exported to TypeScript via `js_from_routes`.
+
+## Authentication/Authorization
+
+- Authentication/Authorization guidance is intentionally omitted here; Devise configuration and controllers define auth behavior in code.
+
+## Library Documentation
+
+- When working with or discussing any external library, gem, or framework (e.g., Devise, React, Rails, etc.), always use Context7 via `mcp_context7_resolve-library-id` and `mcp_context7_get-library-docs` to fetch up-to-date documentation and best practices.
+- This ensures implementation follows current library conventions and avoids outdated patterns.
+- Example workflow:
+  1. Resolve library ID: `mcp_context7_resolve-library-id` with the library name
+  2. Fetch docs: `mcp_context7_get-library-docs` with the resolved ID and relevant topic
+  3. Verify implementation matches current documentation

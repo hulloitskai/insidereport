@@ -19,6 +19,7 @@ module SharesApplicationProps
           token: form_authenticity_token,
         },
         flash: flash.to_h,
+        "currentUser" => current_user,
       }
     end
   end

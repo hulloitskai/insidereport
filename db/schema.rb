@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_13_022551) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_13_032046) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -40,66 +40,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_022551) do
     t.uuid "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
-  end
-
-  create_table "activities", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "emoji"
-    t.string "template_id"
-    t.uuid "user_id", null: false
-    t.text "description", null: false
-    t.string "location_name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id", "template_id"], name: "index_activities_on_user_id_and_template_id", unique: true
-    t.index ["user_id"], name: "index_activities_on_user_id"
-  end
-
-  create_table "activity_coupons", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "friend_id", null: false
-    t.uuid "activity_id", null: false
-    t.datetime "expires_at", precision: nil, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "redeemed_at", precision: nil
-    t.index ["activity_id"], name: "index_activity_coupons_on_activity_id"
-    t.index ["expires_at"], name: "index_activity_coupons_on_expires_at"
-    t.index ["friend_id"], name: "index_activity_coupons_on_friend_id"
-    t.index ["redeemed_at"], name: "index_activity_coupons_on_redeemed_at"
-  end
-
-  create_table "encouragements", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "friend_id", null: false
-    t.string "emoji", null: false
-    t.text "message", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.index ["created_at"], name: "index_encouragements_on_created_at"
-    t.index ["friend_id"], name: "index_encouragements_on_friend_id"
-  end
-
-  create_table "friends", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "name", null: false
-    t.string "emoji"
-    t.string "phone_number"
-    t.uuid "user_id", null: false
-    t.string "access_token", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "paused_since", precision: nil
-    t.string "subscribed_post_types", null: false, array: true
-    t.boolean "chosen_family", null: false
-    t.uuid "deprecated_join_request_id"
-    t.datetime "notifications_last_cleared_at", precision: nil
-    t.uuid "invitation_id"
-    t.index ["access_token"], name: "index_friends_on_access_token", unique: true
-    t.index ["chosen_family"], name: "index_friends_on_chosen_family"
-    t.index ["deprecated_join_request_id"], name: "index_friends_on_deprecated_join_request_id"
-    t.index ["invitation_id"], name: "index_friends_on_invitation_id"
-    t.index ["name", "user_id"], name: "index_friends_name_uniqueness", unique: true
-    t.index ["notifications_last_cleared_at"], name: "index_friends_on_notifications_last_cleared_at"
-    t.index ["phone_number"], name: "index_friends_on_phone_number"
-    t.index ["user_id", "phone_number"], name: "index_friends_phone_number_uniqueness", unique: true
-    t.index ["user_id"], name: "index_friends_on_user_id"
   end
 
   create_table "good_job_batches", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -191,221 +131,44 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_022551) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
-  create_table "invitations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.string "invitee_name", null: false
-    t.string "invitee_emoji"
-    t.uuid "offered_activity_ids", default: [], null: false, array: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.uuid "join_request_id"
-    t.index ["invitee_name", "user_id"], name: "index_invitations_invitee_name_uniqueness", unique: true
-    t.index ["join_request_id"], name: "index_invitations_on_join_request_id"
-    t.index ["user_id"], name: "index_invitations_on_user_id"
-  end
-
-  create_table "join_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
+  create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.string "phone_number", null: false
+    t.string "handle", null: false
+    t.uuid "owner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id", "phone_number"], name: "index_join_requests_uniqueness", unique: true
-    t.index ["user_id"], name: "index_join_requests_on_user_id"
-  end
-
-  create_table "login_requests", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "phone_number", null: false
-    t.string "login_code", null: false
-    t.datetime "completed_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["completed_at"], name: "index_login_requests_on_completed_at"
-  end
-
-  create_table "notifications", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.datetime "delivered_at", precision: nil
-    t.string "deprecated_delivery_token"
-    t.string "noticeable_type", null: false
-    t.uuid "noticeable_id", null: false
-    t.string "recipient_type"
-    t.uuid "recipient_id"
-    t.datetime "pushed_at", precision: nil
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["deprecated_delivery_token"], name: "index_notifications_on_deprecated_delivery_token", unique: true
-    t.index ["noticeable_type", "noticeable_id"], name: "index_notifications_on_noticeable"
-    t.index ["recipient_type", "recipient_id"], name: "index_notifications_on_recipient"
-  end
-
-  create_table "post_reactions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "post_id", null: false
-    t.string "emoji", null: false
-    t.uuid "friend_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.index ["friend_id"], name: "index_post_reactions_on_friend_id"
-    t.index ["post_id", "friend_id", "emoji"], name: "index_post_reactions_uniqueness", unique: true
-    t.index ["post_id"], name: "index_post_reactions_on_post_id"
-  end
-
-  create_table "post_reply_receipts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "post_id", null: false
-    t.uuid "friend_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.index ["friend_id"], name: "index_post_reply_receipts_on_friend_id"
-    t.index ["post_id"], name: "index_post_reply_receipts_on_post_id"
-  end
-
-  create_table "post_shares", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "post_id", null: false
-    t.string "sharer_type", null: false
-    t.uuid "sharer_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.index ["post_id", "sharer_id", "sharer_type"], name: "index_post_shares_uniqueness", unique: true
-    t.index ["post_id"], name: "index_post_shares_on_post_id"
-    t.index ["sharer_type", "sharer_id"], name: "index_post_shares_on_sharer"
-  end
-
-  create_table "post_stickers", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "post_id", null: false
-    t.uuid "friend_id", null: false
-    t.string "emoji", null: false
-    t.float "relative_position_x", null: false
-    t.float "relative_position_y", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.index ["emoji"], name: "index_post_stickers_on_emoji"
-    t.index ["friend_id"], name: "index_post_stickers_on_friend_id"
-    t.index ["post_id"], name: "index_post_stickers_on_post_id"
-  end
-
-  create_table "post_views", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "post_id", null: false
-    t.uuid "friend_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.index ["friend_id", "post_id"], name: "index_post_views_uniqueness", unique: true
-    t.index ["friend_id"], name: "index_post_views_on_friend_id"
-    t.index ["post_id"], name: "index_post_views_on_post_id"
-  end
-
-  create_table "posts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.text "body_html", null: false
-    t.uuid "author_id", null: false
-    t.string "emoji"
-    t.string "type", null: false
-    t.string "title"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "visibility", null: false
-    t.datetime "pinned_until", precision: nil
-    t.uuid "quoted_post_id"
-    t.uuid "hidden_from_ids", default: [], null: false, array: true
-    t.uuid "images_ids", default: [], null: false, array: true
-    t.uuid "encouragement_id"
-    t.index "(((to_tsvector('simple'::regconfig, COALESCE((emoji)::text, ''::text)) || to_tsvector('simple'::regconfig, COALESCE((title)::text, ''::text))) || to_tsvector('simple'::regconfig, COALESCE(body_html, ''::text))))", name: "index_posts_for_search", using: :gin
-    t.index ["author_id"], name: "index_posts_on_author_id"
-    t.index ["encouragement_id"], name: "index_posts_on_encouragement_id", unique: true
-    t.index ["hidden_from_ids"], name: "index_posts_on_hidden_from_ids", using: :gin
-    t.index ["pinned_until"], name: "index_posts_on_pinned_until"
-    t.index ["quoted_post_id"], name: "index_posts_on_quoted_post_id"
-    t.index ["type"], name: "index_posts_on_type"
-    t.index ["visibility"], name: "index_posts_on_visibility"
-  end
-
-  create_table "push_registrations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "owner_type"
-    t.uuid "owner_id"
-    t.uuid "push_subscription_id", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.uuid "device_id", null: false
-    t.string "device_fingerprint", null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.float "device_fingerprint_confidence", limit: 24, null: false
-    t.integer "deprecated_service_worker_version"
-    t.index ["device_fingerprint"], name: "index_push_registrations_on_device_fingerprint"
-    t.index ["device_id"], name: "index_push_registrations_on_device_id"
-    t.index ["owner_type", "owner_id", "push_subscription_id"], name: "index_push_registrations_uniqueness", unique: true
-    t.index ["owner_type", "owner_id"], name: "index_push_registrations_on_owner"
-    t.index ["push_subscription_id"], name: "index_push_registrations_on_push_subscription_id"
-  end
-
-  create_table "push_subscriptions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.string "auth_key", null: false
-    t.string "endpoint", null: false
-    t.string "p256dh_key", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "service_worker_version"
-    t.index ["endpoint"], name: "index_push_subscriptions_on_endpoint", unique: true
-  end
-
-  create_table "sessions", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "user_id", null: false
-    t.inet "ip_address", null: false
-    t.string "user_agent", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_sessions_on_user_id"
+    t.index ["handle"], name: "index_organizations_on_handle", unique: true
+    t.index ["owner_id"], name: "index_organizations_on_owner_id"
   end
 
   create_table "task_records", id: false, force: :cascade do |t|
     t.string "version", null: false
   end
 
-  create_table "text_blasts", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
-    t.uuid "post_id", null: false
-    t.uuid "friend_id", null: false
-    t.string "phone_number", null: false
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "sent_at", precision: nil
-    t.index ["friend_id"], name: "index_text_blasts_on_friend_id"
-    t.index ["post_id"], name: "index_text_blasts_on_post_id"
-  end
-
   create_table "users", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.string "email", null: false
+    t.string "encrypted_password", null: false
+    t.string "reset_password_token"
+    t.datetime "reset_password_sent_at", precision: nil
+    t.datetime "remember_created_at", precision: nil
+    t.integer "sign_in_count", default: 0, null: false
+    t.datetime "current_sign_in_at", precision: nil
+    t.datetime "last_sign_in_at", precision: nil
+    t.inet "current_sign_in_ip"
+    t.inet "last_sign_in_ip"
+    t.string "confirmation_token"
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "confirmation_sent_at", precision: nil
+    t.string "unconfirmed_email"
     t.string "name", null: false
-    t.string "handle", null: false
-    t.string "phone_number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.datetime "notifications_last_cleared_at", precision: nil
-    t.string "theme"
-    t.string "time_zone_name", null: false
-    t.boolean "hide_stats", null: false
-    t.string "reply_to_number"
-    t.string "api_token"
-    t.boolean "hide_neko", null: false
-    t.boolean "allow_friend_sharing", null: false
-    t.index ["api_token"], name: "index_users_on_api_token", unique: true
-    t.index ["handle"], name: "index_users_on_handle", unique: true
-    t.index ["notifications_last_cleared_at"], name: "index_users_on_notifications_last_cleared_at"
-    t.index ["phone_number"], name: "index_users_on_phone_number", unique: true
+    t.index ["confirmation_token"], name: "index_users_on_confirmation_token", unique: true
+    t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "activities", "users"
-  add_foreign_key "activity_coupons", "activities"
-  add_foreign_key "activity_coupons", "friends"
-  add_foreign_key "encouragements", "friends"
-  add_foreign_key "friends", "invitations"
-  add_foreign_key "friends", "join_requests", column: "deprecated_join_request_id"
-  add_foreign_key "friends", "users"
-  add_foreign_key "invitations", "users"
-  add_foreign_key "join_requests", "users"
-  add_foreign_key "post_reactions", "friends"
-  add_foreign_key "post_reactions", "posts"
-  add_foreign_key "post_reply_receipts", "friends"
-  add_foreign_key "post_reply_receipts", "posts"
-  add_foreign_key "post_shares", "posts"
-  add_foreign_key "post_stickers", "friends"
-  add_foreign_key "post_stickers", "posts"
-  add_foreign_key "post_views", "friends"
-  add_foreign_key "post_views", "posts"
-  add_foreign_key "posts", "encouragements"
-  add_foreign_key "posts", "posts", column: "quoted_post_id"
-  add_foreign_key "posts", "users", column: "author_id"
-  add_foreign_key "push_registrations", "push_subscriptions"
-  add_foreign_key "sessions", "users"
-  add_foreign_key "text_blasts", "friends"
-  add_foreign_key "text_blasts", "posts"
+  add_foreign_key "organizations", "users", column: "owner_id"
 end

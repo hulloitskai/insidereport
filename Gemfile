@@ -155,6 +155,13 @@ gem "unicode-emoji", "~> 3.7", require: "unicode/emoji"
 # Generate fake data
 gem "faker", "~> 3.5"
 
+# Use Devise for authentication
+gem "devise", "~> 4.9"
+gem "devise-argon2", "~> 2.0"
+
+# Check password strength with StrongPassword
+gem "strong_password", "~> 0.0.10"
+
 group :development, :test do
   # Debug code with debug
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

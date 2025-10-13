@@ -1,6 +1,6 @@
 import { type PageProps } from "@inertiajs/core";
 
-import { type PageCSRF } from ".";
+import { type PageCSRF, type User } from ".";
 
 export default interface SharedPageProps extends PageProps {
   csrf: PageCSRF;
@@ -8,4 +8,5 @@ export default interface SharedPageProps extends PageProps {
     notice?: string;
     alert?: string;
   };
+  currentUser: User | null;
 }

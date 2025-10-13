@@ -25,24 +25,4 @@ class ActiveSupport::TestCase
     ).returns(T::Array[ActiveStorage::Blob])
   end
   def active_storage_blobs(fixture_name = nil, *other_fixtures); end
-
-  sig { params(fixture_name: NilClass, other_fixtures: NilClass).returns(T::Array[T.untyped]) }
-  sig { params(fixture_name: T.any(String, Symbol), other_fixtures: NilClass).returns(T.untyped) }
-  sig do
-    params(
-      fixture_name: T.any(String, Symbol),
-      other_fixtures: T.any(String, Symbol)
-    ).returns(T::Array[T.untyped])
-  end
-  def posts(fixture_name = nil, *other_fixtures); end
-
-  sig { params(fixture_name: NilClass, other_fixtures: NilClass).returns(T::Array[T.untyped]) }
-  sig { params(fixture_name: T.any(String, Symbol), other_fixtures: NilClass).returns(T.untyped) }
-  sig do
-    params(
-      fixture_name: T.any(String, Symbol),
-      other_fixtures: T.any(String, Symbol)
-    ).returns(T::Array[T.untyped])
-  end
-  def users(fixture_name = nil, *other_fixtures); end
 end

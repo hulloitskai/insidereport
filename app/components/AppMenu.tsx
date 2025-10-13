@@ -1,7 +1,10 @@
-import { Loader, Text } from "@mantine/core";
+import { type InertiaLinkProps } from "@inertiajs/react";
+import { Loader, type MenuItemProps, Text } from "@mantine/core";
 
 import MenuIcon from "~icons/heroicons/bars-3-20-solid";
+import ServerIcon from "~icons/heroicons/server-stack-20-solid";
 
+import { completeSignOut } from "~/helpers/authentication";
 import { useContact } from "~/helpers/contact";
 
 import classes from "./AppMenu.module.css";
@@ -11,15 +14,16 @@ export interface AppMenuProps
     Omit<ComponentPropsWithoutRef<"div">, "style" | "children" | "onChange"> {}
 
 const AppMenu: FC<AppMenuProps> = ({ ...otherProps }) => {
+  const currentUser = useCurrentUser();
   const [opened, setOpened] = useState(false);
 
-  // // == Link items
-  // interface MenuLinkProps
-  //   extends MenuItemProps,
-  //     Omit<InertiaLinkProps, "color" | "style"> {}
-  // const MenuLink: FC<MenuLinkProps> = props => (
-  //   <Menu.Item component={Link} {...props} />
-  // );
+  // == Link items
+  interface MenuLinkProps
+    extends MenuItemProps,
+      Omit<InertiaLinkProps, "color" | "style"> {}
+  const MenuLink: FC<MenuLinkProps> = props => (
+    <Menu.Item component={Link} {...props} />
+  );
 
   return (
     <Menu
@@ -29,7 +33,7 @@ const AppMenu: FC<AppMenuProps> = ({ ...otherProps }) => {
       {...{ opened }}
       onChange={setOpened}
       offset={4}
-      width={220}
+      width={240}
       arrowPosition="center"
       className={classes.menu}
       {...otherProps}
@@ -45,13 +49,13 @@ const AppMenu: FC<AppMenuProps> = ({ ...otherProps }) => {
         </Badge>
       </Menu.Target>
       <Menu.Dropdown>
-        {/* {currentUser ? (
+        {currentUser ? (
           <>
             <MenuLink
-              href={routes.world.show.path()}
-              leftSection={<Image src={logoSrc} h="100%" w="unset" />}
+              href={routes.home.redirect.path()}
+              leftSection={<HomeIcon />}
             >
-              your world
+              home
             </MenuLink>
             <LogoutItem
               onClose={() => {
@@ -61,22 +65,23 @@ const AppMenu: FC<AppMenuProps> = ({ ...otherProps }) => {
           </>
         ) : (
           <>
-            <MenuLink
-              href={routes.registration.new.path()}
-              leftSection={<Image src={logoSrc} h="100%" w="unset" />}
-            >
-              create your world
-            </MenuLink>
             <Menu.Item
               leftSection={<SignInIcon />}
               component={Link}
-              href={routes.session.new.path()}
+              href={routes.usersSessions.new.path()}
             >
               sign in
             </Menu.Item>
+            <MenuLink
+              href={routes.usersRegistrations.new.path()}
+              leftSection="🤩"
+              className={classes.registrationItem}
+            >
+              sign up
+            </MenuLink>
           </>
         )}
-        <Menu.Divider /> */}
+        <Menu.Divider />
         <ContactItem
           onClose={() => {
             setOpened(false);
@@ -90,6 +95,34 @@ const AppMenu: FC<AppMenuProps> = ({ ...otherProps }) => {
 };
 
 export default AppMenu;
+
+interface LogoutItemProps extends BoxProps {
+  onClose: () => void;
+}
+
+const LogoutItem: FC<LogoutItemProps> = ({ onClose, ...otherProps }) => {
+  const { trigger, mutating } = useRouteMutation(routes.usersSessions.destroy, {
+    descriptor: "sign out",
+    onSuccess: () => {
+      completeSignOut();
+      onClose();
+    },
+  });
+
+  return (
+    <Menu.Item
+      pos="relative"
+      leftSection={mutating ? <Loader size={12} /> : <SignOutIcon />}
+      closeMenuOnClick={false}
+      onClick={() => {
+        void trigger();
+      }}
+      {...otherProps}
+    >
+      sign out
+    </Menu.Item>
+  );
+};
 
 interface ContactItemProps extends BoxProps {
   onClose: () => void;
@@ -110,7 +143,8 @@ const ContactItem: FC<ContactItemProps> = ({ onClose, ...otherProps }) => {
       }}
       {...otherProps}
     >
-      contact the creator :)
+      contact the developer{" "}
+      <span style={{ fontFamily: "var(--font-family-emoji)" }}>🧑‍💻</span>
     </Menu.Item>
   );
 };
@@ -129,6 +163,7 @@ const ServerInfoItem: FC<BoxProps> = props => {
       component="div"
       disabled
       className={classes.serverInfoItem}
+      leftSection={<ServerIcon />}
       {...props}
     >
       server booted{" "}

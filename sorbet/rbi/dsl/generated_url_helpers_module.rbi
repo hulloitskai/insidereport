@@ -16,7 +16,16 @@ module GeneratedUrlHelpersModule
   def contact_url_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def destroy_user_session_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def download_image_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def edit_user_password_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def edit_user_registration_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def file_url(*args); end
@@ -25,16 +34,40 @@ module GeneratedUrlHelpersModule
   def good_job_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def home_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def image_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def mailcatcher_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
+  def new_organization_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_source_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def new_user_confirmation_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def new_user_password_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def new_user_registration_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def new_user_session_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def organization_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def organizations_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def rails_blob_representation_proxy_url(*args); end
@@ -128,4 +161,16 @@ module GeneratedUrlHelpersModule
 
   sig { params(args: T.untyped).returns(String) }
   def update_rails_disk_service_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def user_confirmation_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def user_password_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def user_registration_url(*args); end
+
+  sig { params(args: T.untyped).returns(String) }
+  def user_session_url(*args); end
 end

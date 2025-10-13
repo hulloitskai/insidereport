@@ -3,7 +3,6 @@ import {
   Alert,
   Button,
   Chip,
-  CloseButton,
   createTheme as createMantineTheme,
   DEFAULT_THEME,
   type DefaultMantineColor,
@@ -116,7 +115,6 @@ const createTheme = (
           variant: "light",
         },
         classNames: {
-          root: classes.badge,
           label: classes.badgeLabel,
         },
       }),
@@ -125,7 +123,6 @@ const createTheme = (
           variant: "light",
         },
         classNames: {
-          root: classes.button,
           label: classes.buttonLabel,
         },
         styles: (_theme, { size = "sm" }) => ({
@@ -199,11 +196,9 @@ const createTheme = (
         },
         classNames: {
           dropdown: classes.menuDropdown,
-          arrow: classes.menuArrow,
           item: classes.menuItem,
           itemSection: classes.menuItemSection,
           itemLabel: classes.menuItemLabel,
-          divider: classes.menuDivider,
         },
       }),
       NavLink: NavLink.extend({
@@ -294,11 +289,6 @@ const createTheme = (
           root: classes.typography,
         },
       }),
-      CloseButton: CloseButton.extend({
-        classNames: {
-          root: classes.closeButton,
-        },
-      }),
       Divider: Divider.extend({
         classNames: {
           root: classes.divider,
@@ -321,16 +311,6 @@ const createTheme = (
       Chip: Chip.extend({
         defaultProps: {
           variant: "outline",
-        },
-      }),
-      Checkbox: Checkbox.extend({
-        classNames: {
-          root: classes.checkbox,
-        },
-      }),
-      Skeleton: Skeleton.extend({
-        classNames: {
-          root: classes.skeleton,
         },
       }),
       InputWrapper: InputWrapper.extend({

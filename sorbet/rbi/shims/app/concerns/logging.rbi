@@ -1,4 +1,4 @@
-# typed: strong
+# typed: true
 
 module Logging
   sig { returns(T.any(ActiveSupport::Logger, ActiveSupport::BroadcastLogger)) }

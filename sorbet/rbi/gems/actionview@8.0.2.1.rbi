@@ -19,6 +19,8 @@ class ActionController::Base < ::ActionController::Metal
   include ::ActionPolicy::Behaviours::ThreadMemoized::InstanceMethods
   include ::ActionPolicy::Behaviours::Memoized::InstanceMethods
   include ::ActionPolicy::Behaviours::Namespaced::InstanceMethods
+  include ::Devise::Controllers::SignInOut
+  include ::Devise::Controllers::StoreLocation
   extend ::AbstractController::Helpers::Resolution
   extend ::ActionPolicy::Behaviour::ClassMethods
 end
@@ -398,6 +400,7 @@ class ActionView::Base
   include ::ActionView::Helpers
   include ::ActionCable::Helpers::ActionCableHelper
   include ::ViteRails::TagHelpers
+  include ::Devise::Controllers::UrlHelpers
   extend ::ActionView::Helpers::UrlHelper::ClassMethods
   extend ::ActionView::Helpers::SanitizeHelper::ClassMethods
 
@@ -14033,8 +14036,6 @@ end
 #
 # source://actionview//lib/action_view/renderer/streaming_template_renderer.rb#13
 class ActionView::StreamingTemplateRenderer::Body
-  include ::Sentry::Rails::Overrides::StreamingReporter
-
   # @return [Body] a new instance of Body
   #
   # source://actionview//lib/action_view/renderer/streaming_template_renderer.rb#14
@@ -14042,6 +14043,8 @@ class ActionView::StreamingTemplateRenderer::Body
 
   # source://actionview//lib/action_view/renderer/streaming_template_renderer.rb#18
   def each(&block); end
+
+  private
 
   # This is the same logging logic as in ShowExceptions middleware.
   #
@@ -15617,6 +15620,17 @@ class ActionView::TestCase::TestController < ::ActionController::Base
     # source://actionview//lib/action_view/test_case.rb#16
     def __class_attr_middleware_stack=(new_value); end
   end
+end
+
+# source://actionview//lib/action_view/test_case.rb#16
+module ActionView::TestCase::TestController::HelperMethods
+  include ::ActionText::ContentHelper
+  include ::ActionText::TagHelper
+  include ::InertiaRails::Helper
+  include ::InertiaRails::AssetHelper
+  include ::ViteRails::TagHelpers
+  include ::ActionController::Base::HelperMethods
+  include ::DeviseHelper
 end
 
 # source://actionview//lib/action_view/unbound_template.rb#6

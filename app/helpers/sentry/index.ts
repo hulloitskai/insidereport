@@ -3,7 +3,7 @@ import {
   captureConsoleIntegration,
   contextLinesIntegration,
   httpClientIntegration,
-  init,
+  init as initSentry,
   replayCanvasIntegration,
   replayIntegration,
 } from "@sentry/react";
@@ -28,7 +28,7 @@ export const setupSentry = (): void => {
     };
 
     // == Browser client initialization
-    init({
+    initSentry({
       ...config,
       integrations: [
         contextLinesIntegration(),

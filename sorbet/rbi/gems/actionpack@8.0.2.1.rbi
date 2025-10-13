@@ -1259,10 +1259,13 @@ class ActionController::API < ::ActionController::Metal
   include ::ActionController::Rescue
   include ::ActionController::Instrumentation
   include ::ActionController::ParamsWrapper
+  include ::ActionController::RespondWith
   include ::ActionDispatch::Routing::RouteSet::MountedHelpers
   include ::ActiveRecord::Railties::ControllerRuntime
-  include ::Sentry::Rails::ControllerMethods
-  include ::Sentry::Rails::ControllerTransaction
+  include ::Devise::Controllers::SignInOut
+  include ::Devise::Controllers::StoreLocation
+  include ::Devise::Controllers::Helpers
+  include ::Devise::Controllers::UrlHelpers
   extend ::ActionView::ViewPaths::ClassMethods
   extend ::AbstractController::UrlFor::ClassMethods
   extend ::ActionController::Rendering::ClassMethods
@@ -1279,8 +1282,10 @@ class ActionController::API < ::ActionController::Metal
   extend ::ActiveSupport::Rescuable::ClassMethods
   extend ::ActionController::Instrumentation::ClassMethods
   extend ::ActionController::ParamsWrapper::ClassMethods
+  extend ::ActionController::RespondWith::ClassMethods
   extend ::ActionController::Railties::Helpers
   extend ::ActiveRecord::Railties::ControllerRuntime::ClassMethods
+  extend ::Devise::Controllers::Helpers::ClassMethods
 
   # source://actionpack//lib/action_controller/api.rb#149
   def __callbacks; end
@@ -1363,6 +1368,15 @@ class ActionController::API < ::ActionController::Metal
   # source://actionpack//lib/action_controller/api.rb#149
   def logger=(value); end
 
+  # source://actionpack//lib/action_controller/api.rb#153
+  def mimes_for_respond_to; end
+
+  # source://actionpack//lib/action_controller/api.rb#153
+  def mimes_for_respond_to=(_arg0); end
+
+  # source://actionpack//lib/action_controller/api.rb#153
+  def mimes_for_respond_to?; end
+
   # source://actionpack//lib/action_controller/api.rb#149
   def perform_caching; end
 
@@ -1389,6 +1403,15 @@ class ActionController::API < ::ActionController::Metal
 
   # source://actionpack//lib/action_controller/api.rb#149
   def rescue_handlers?; end
+
+  # source://actionpack//lib/action_controller/api.rb#153
+  def responder; end
+
+  # source://actionpack//lib/action_controller/api.rb#153
+  def responder=(_arg0); end
+
+  # source://actionpack//lib/action_controller/api.rb#153
+  def responder?; end
 
   class << self
     # source://actionpack//lib/action_controller/api.rb#149
@@ -1475,6 +1498,15 @@ class ActionController::API < ::ActionController::Metal
     # source://actionpack//lib/action_controller/api.rb#149
     def logger=(value); end
 
+    # source://actionpack//lib/action_controller/api.rb#153
+    def mimes_for_respond_to; end
+
+    # source://actionpack//lib/action_controller/api.rb#153
+    def mimes_for_respond_to=(value); end
+
+    # source://actionpack//lib/action_controller/api.rb#153
+    def mimes_for_respond_to?; end
+
     # source://actionpack//lib/action_controller/api.rb#149
     def perform_caching; end
 
@@ -1501,6 +1533,15 @@ class ActionController::API < ::ActionController::Metal
 
     # source://actionpack//lib/action_controller/api.rb#149
     def rescue_handlers?; end
+
+    # source://actionpack//lib/action_controller/api.rb#153
+    def responder; end
+
+    # source://actionpack//lib/action_controller/api.rb#153
+    def responder=(value); end
+
+    # source://actionpack//lib/action_controller/api.rb#153
+    def responder?; end
 
     # Shortcut helper that returns all the ActionController::API modules except the
     # ones passed as arguments:
@@ -1568,11 +1609,23 @@ class ActionController::API < ::ActionController::Metal
     # source://actionpack//lib/action_controller/api.rb#92
     def __class_attr_middleware_stack=(new_value); end
 
+    # source://actionpack//lib/action_controller/api.rb#153
+    def __class_attr_mimes_for_respond_to; end
+
+    # source://actionpack//lib/action_controller/api.rb#153
+    def __class_attr_mimes_for_respond_to=(new_value); end
+
     # source://actionpack//lib/action_controller/api.rb#149
     def __class_attr_rescue_handlers; end
 
     # source://actionpack//lib/action_controller/api.rb#149
     def __class_attr_rescue_handlers=(new_value); end
+
+    # source://actionpack//lib/action_controller/api.rb#153
+    def __class_attr_responder; end
+
+    # source://actionpack//lib/action_controller/api.rb#153
+    def __class_attr_responder=(new_value); end
   end
 end
 
@@ -1986,6 +2039,7 @@ class ActionController::Base < ::ActionController::Metal
   include ::ActionController::Instrumentation
   include ::ActionController::ParamsWrapper
   include ::InertiaRails::Controller
+  include ::ActionController::RespondWith
   include ::ActionDispatch::Routing::RouteSet::MountedHelpers
   include ::ActiveRecord::Railties::ControllerRuntime
   include ::ActionPolicy::Behaviours::PolicyFor
@@ -1998,8 +2052,10 @@ class ActionController::Base < ::ActionController::Metal
   include ::ActionPolicy::Behaviours::ThreadMemoized::InstanceMethods
   include ::ActionPolicy::Behaviours::Memoized::InstanceMethods
   include ::ActionPolicy::Behaviours::Namespaced::InstanceMethods
-  include ::Sentry::Rails::ControllerMethods
-  include ::Sentry::Rails::ControllerTransaction
+  include ::Devise::Controllers::SignInOut
+  include ::Devise::Controllers::StoreLocation
+  include ::Devise::Controllers::Helpers
+  include ::Devise::Controllers::UrlHelpers
   extend ::ActionView::ViewPaths::ClassMethods
   extend ::AbstractController::Helpers::Resolution
   extend ::AbstractController::Helpers::ClassMethods
@@ -2029,11 +2085,14 @@ class ActionController::Base < ::ActionController::Metal
   extend ::ActiveSupport::Rescuable::ClassMethods
   extend ::ActionController::Instrumentation::ClassMethods
   extend ::ActionController::ParamsWrapper::ClassMethods
+  extend ::Responders::ControllerMethod
   extend ::InertiaRails::Controller::ClassMethods
+  extend ::ActionController::RespondWith::ClassMethods
   extend ::ActionController::Railties::Helpers
   extend ::ActiveRecord::Railties::ControllerRuntime::ClassMethods
   extend ::ActionPolicy::Behaviour::ClassMethods
   extend ::ActionPolicy::Controller::ClassMethods
+  extend ::Devise::Controllers::Helpers::ClassMethods
 
   # source://actionpack//lib/action_controller/base.rb#291
   def __callbacks; end
@@ -2218,6 +2277,15 @@ class ActionController::Base < ::ActionController::Metal
   # source://actionpack//lib/action_controller/base.rb#276
   def logger=(value); end
 
+  # source://actionpack//lib/action_controller/base.rb#330
+  def mimes_for_respond_to; end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def mimes_for_respond_to=(_arg0); end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def mimes_for_respond_to?; end
+
   # source://actionpack//lib/action_controller/base.rb#289
   def notice; end
 
@@ -2265,6 +2333,15 @@ class ActionController::Base < ::ActionController::Metal
 
   # source://actionpack//lib/action_controller/base.rb#307
   def rescue_handlers?; end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def responder; end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def responder=(_arg0); end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def responder?; end
 
   # source://actionpack//lib/action_controller/base.rb#273
   def stylesheets_dir; end
@@ -2505,6 +2582,15 @@ class ActionController::Base < ::ActionController::Metal
     # source://actionpack//lib/action_controller/base.rb#276
     def logger=(value); end
 
+    # source://actionpack//lib/action_controller/base.rb#330
+    def mimes_for_respond_to; end
+
+    # source://actionpack//lib/action_controller/base.rb#330
+    def mimes_for_respond_to=(value); end
+
+    # source://actionpack//lib/action_controller/base.rb#330
+    def mimes_for_respond_to?; end
+
     # source://actionpack//lib/action_controller/base.rb#291
     def per_form_csrf_tokens; end
 
@@ -2549,6 +2635,15 @@ class ActionController::Base < ::ActionController::Metal
 
     # source://actionpack//lib/action_controller/base.rb#307
     def rescue_handlers?; end
+
+    # source://actionpack//lib/action_controller/base.rb#330
+    def responder; end
+
+    # source://actionpack//lib/action_controller/base.rb#330
+    def responder=(value); end
+
+    # source://actionpack//lib/action_controller/base.rb#330
+    def responder?; end
 
     # source://actionpack//lib/action_controller/base.rb#273
     def stylesheets_dir; end
@@ -2670,11 +2765,23 @@ class ActionController::Base < ::ActionController::Metal
     # source://actionpack//lib/action_controller/base.rb#207
     def __class_attr_middleware_stack=(new_value); end
 
+    # source://actionpack//lib/action_controller/base.rb#330
+    def __class_attr_mimes_for_respond_to; end
+
+    # source://actionpack//lib/action_controller/base.rb#330
+    def __class_attr_mimes_for_respond_to=(new_value); end
+
     # source://actionpack//lib/action_controller/base.rb#307
     def __class_attr_rescue_handlers; end
 
     # source://actionpack//lib/action_controller/base.rb#307
     def __class_attr_rescue_handlers=(new_value); end
+
+    # source://actionpack//lib/action_controller/base.rb#330
+    def __class_attr_responder; end
+
+    # source://actionpack//lib/action_controller/base.rb#330
+    def __class_attr_responder=(new_value); end
   end
 end
 
@@ -2707,6 +2814,12 @@ module ActionController::Base::HelperMethods
   # source://actionpack//lib/action_controller/base.rb#288
   def cookies(*_arg0, **_arg1, &_arg2); end
 
+  # source://actionpack//lib/action_controller/base.rb#330
+  def current_user(*_arg0, **_arg1, &_arg2); end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def devise_controller?(*_arg0, **_arg1, &_arg2); end
+
   # source://actionpack//lib/action_controller/base.rb#291
   def form_authenticity_token(*_arg0, **_arg1, &_arg2); end
 
@@ -2716,8 +2829,20 @@ module ActionController::Base::HelperMethods
   # source://actionpack//lib/action_controller/base.rb#291
   def protect_against_forgery?(*_arg0, **_arg1, &_arg2); end
 
+  # source://actionpack//lib/action_controller/base.rb#330
+  def signed_in?(*_arg0, **_arg1, &_arg2); end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def user_session(*_arg0, **_arg1, &_arg2); end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def user_signed_in?(*_arg0, **_arg1, &_arg2); end
+
   # source://actionpack//lib/action_controller/base.rb#283
   def view_cache_dependencies(*_arg0, **_arg1, &_arg2); end
+
+  # source://actionpack//lib/action_controller/base.rb#330
+  def warden(*_arg0, **_arg1, &_arg2); end
 end
 
 # source://actionpack//lib/action_controller/base.rb#230
@@ -4409,16 +4534,12 @@ class ActionController::InvalidParameterKey < ::ArgumentError; end
 #
 # source://actionpack//lib/action_controller/metal/live.rb#56
 module ActionController::Live
-  include ::Sentry::Rails::Overrides::StreamingReporter
   extend ::ActiveSupport::Concern
 
   mixes_in_class_methods ::ActionController::Live::ClassMethods
 
   # source://actionpack//lib/action_controller/metal/live.rb#386
   def clean_up_thread_locals(*args); end
-
-  # source://actionpack//lib/action_controller/metal/live.rb#394
-  def log_error(exception); end
 
   # source://actionpack//lib/action_controller/metal/live.rb#377
   def new_controller_thread; end
@@ -4459,6 +4580,9 @@ module ActionController::Live
   def send_stream(filename:, disposition: T.unsafe(nil), type: T.unsafe(nil)); end
 
   private
+
+  # source://actionpack//lib/action_controller/metal/live.rb#394
+  def log_error(exception); end
 
   # Ensure we clean up any thread locals we copied so that the thread can reused.
   # Because of the above, we need to prevent the clearing of thread locals, since

@@ -1,33 +1,6 @@
 @layer mantine, components;
 
 @layer components {
-  .button {
-    &:where(
-      :disabled:not([data-loading]),
-      [data-disabled]:not([data-loading])
-    ) {
-      @mixin dark-user-theme {
-        color: var(--mantine-color-dark-2);
-        background-color: alpha(var(--mantine-color-black), 0.4);
-      }
-
-      [data-mantine-color-scheme="dark"]:not([data-user-theme]) .card & {
-        background-color: var(--mantine-color-dark-7);
-      }
-    }
-
-    &[data-variant="default"] {
-      @mixin dark-user-theme {
-        background-color: var(--mantine-color-body);
-        border-color: alpha(var(--mantine-color-white), 0.2);
-
-        @mixin hover {
-          background-color: lighten(var(--mantine-color-body), 0.1);
-        }
-      }
-    }
-  }
-
   .buttonLabel {
     font-family: var(--mantine-font-family-headings);
     font-weight: var(--button-fw);
@@ -43,10 +16,6 @@
     @mixin dark {
       --input-bg: transparent;
     }
-
-    @mixin dark-user-theme {
-      border-color: alpha(var(--mantine-color-white), 0.2);
-    }
   }
 
   .inputLabel {
@@ -57,25 +26,6 @@
     min-height: 0px;
     align-items: start;
     padding-bottom: 6px;
-
-    /* Enforce minimum lightness of 75% for light user themes */
-    @mixin light-user-theme {
-      --min-lightness: 75;
-
-      background-color: hsl(
-        from var(--mantine-color-body) h s clamp(var(--min-lightness), l, 100)
-      );
-
-      /* Use @supports to add in support for old syntax that requires % units to
-          be specified in lightness calculations. This is required for
-          Safari >= 16.4+ and < 18.0 */
-      @supports (color: hsl(from red h s calc(l - 20%))) {
-        background-color: hsl(
-          from var(--mantine-color-body) h s
-            clamp(calc(var(--min-lightness) * 1%), l, 100%)
-        );
-      }
-    }
   }
 
   .modal[data-full-screen] {
@@ -120,36 +70,6 @@
     }
   }
 
-  .modalContent {
-    /* Enforce minimum lightness of 75% for light user themes */
-    @mixin light-user-theme {
-      --min-lightness: 75;
-
-      background-color: hsl(
-        from var(--mantine-color-body) h s clamp(var(--min-lightness), l, 100)
-      );
-
-      /* Use @supports to add in support for old syntax that requires % units to
-      be specified in lightness calculations. This is required for
-      Safari >= 16.4+ and < 18.0 */
-      @supports (color: hsl(from red h s calc(l - 20%))) {
-        background-color: hsl(
-          from var(--mantine-color-body) h s
-            clamp(calc(var(--min-lightness) * 1%), l, 100%)
-        );
-      }
-    }
-  }
-
-  .badge {
-    &[data-variant="default"] {
-      @mixin dark-user-theme {
-        background-color: var(--mantine-color-body);
-        border-color: alpha(var(--mantine-color-white), 0.2);
-      }
-    }
-  }
-
   .badgeLabel {
     text-transform: none;
     font-family: var(--mantine-font-family-headings);
@@ -160,29 +80,6 @@
       background-color: var(--mantine-color-dark-8);
       border-color: var(--mantine-color-dark-6);
     }
-
-    @mixin dark-user-theme {
-      background-color: alpha(var(--mantine-color-black), 0.4);
-      border-color: alpha(var(--mantine-color-white), 0.2);
-
-      &::before {
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        content: "";
-        backdrop-filter: blur(rem(8px));
-      }
-    }
-
-    .card & {
-      @mixin dark-user-theme {
-        background-color: transparent;
-
-        &::before {
-          content: none;
-        }
-      }
-    }
   }
 
   .cardSection {
@@ -190,24 +87,12 @@
       @mixin dark {
         border-color: var(--mantine-color-dark-6);
       }
-
-      @mixin dark-user-theme {
-        &:not(:global(.mantine-Paper-root .cardSection)) {
-          border-color: alpha(var(--mantine-color-white), 0.2);
-        }
-      }
     }
   }
 
   .dropdown {
     @mixin dark {
       background-color: var(--mantine-color-dark-8);
-    }
-
-    @mixin dark-user-theme {
-      background-color: alpha(var(--mantine-color-black), 0.4);
-      border-color: alpha(var(--mantine-color-white), 0.2);
-      backdrop-filter: blur(rem(8px));
     }
   }
 
@@ -223,10 +108,6 @@
 
   .alert {
     &[data-variant="default"] {
-      @mixin dark-user-theme {
-        background-color: var(--mantine-color-body);
-        border-color: alpha(var(--mantine-color-white), 0.2);
-      }
     }
   }
 
@@ -281,44 +162,17 @@
         margin-bottom: 4px;
       }
     }
-
-    :where(hr) {
-      @mixin dark-user-theme {
-        border-color: alpha(var(--mantine-color-white), 0.2);
-      }
-    }
   }
 
   .divider {
     @mixin dark {
       --divider-color: var(--mantine-color-dark-6);
     }
-
-    @mixin dark-user-theme {
-      --divider-color: alpha(var(--mantine-color-white), 0.2);
-    }
-  }
-
-  .menuDivider {
-    @mixin dark-user-theme {
-      border-color: alpha(var(--mantine-color-white), 0.2);
-    }
   }
 
   .menuDropdown {
     @mixin dark {
       background-color: var(--mantine-color-dark-8);
-    }
-
-    @mixin dark-user-theme {
-      background-color: var(--mantine-color-body);
-      border-color: alpha(var(--mantine-color-white), 0.2);
-    }
-  }
-
-  .menuArrow {
-    @mixin dark-user-theme {
-      border-color: alpha(var(--mantine-color-white), 0.2);
     }
   }
 
@@ -352,12 +206,6 @@
       --popover-border-color: var(--mantine-color-dark-6);
       background-color: var(--mantine-color-dark-8);
     }
-
-    @mixin dark-user-theme {
-      --popover-border-color: alpha(var(--mantine-color-white), 0.2);
-      background-color: var(--mantine-color-body);
-      backdrop-filter: blur(rem(8px));
-    }
   }
 
   .richTextEditorContent {
@@ -373,31 +221,6 @@
 
       @mixin hover {
         background-color: var(--mantine-primary-color-filled-hover);
-      }
-    }
-  }
-
-  .skeleton {
-    &:where([data-visible])::after {
-      @mixin where-dark-user-theme {
-        background-color: alpha(var(--mantine-color-white), 0.2);
-      }
-    }
-  }
-
-  .closeButton {
-    @mixin where-dark-user-theme {
-      @mixin hover {
-        background-color: alpha(var(--mantine-color-black), 0.2);
-      }
-    }
-  }
-
-  .checkbox {
-    @mixin dark-user-theme {
-      &:not([data-checked]) :global(.mantine-Checkbox-input) {
-        background-color: transparent;
-        border-color: alpha(var(--mantine-color-white), 0.2);
       }
     }
   }
