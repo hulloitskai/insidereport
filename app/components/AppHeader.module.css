@@ -1,0 +1,52 @@
+.header {
+  pointer-events: none;
+  background-color: transparent;
+
+  &::before {
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: -8px;
+    content: "";
+    backdrop-filter: blur(rem(4px));
+    background-image: linear-gradient(
+      to top,
+      transparent,
+      alpha(var(--mantine-color-body), 0.8)
+    );
+    mask: linear-gradient(to top, transparent, black rem(24px));
+  }
+
+  [data-radix-focus-guard] + :global(#app) &::before {
+    visibility: hidden;
+  }
+}
+
+.clickable {
+  pointer-events: auto;
+}
+
+.logoButton {
+  height: unset;
+  padding-block: 4px;
+  border-radius: var(--mantine-radius-xl);
+  pointer-events: auto;
+
+  :global(.mantine-Button-label) {
+    font-weight: 900;
+    font-size: var(--mantine-font-size-md);
+    color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  }
+
+  :global(.mantine-Button-section)[data-position="left"] {
+    font-family: var(--font-family-emoji);
+    margin-right: 8px;
+  }
+}
+
+.menu {
+  pointer-events: auto;
+  flex-shrink: 0;
+}

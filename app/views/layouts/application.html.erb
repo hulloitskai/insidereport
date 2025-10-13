@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%# == Inertia page-specific head %>
+    <%== inertia_ssr_head %>
+
+    <%# == Application head %>
+    <meta name="apple-mobile-web-app-title" content="daily data" />
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <%# <link inertia="favicon" rel="shortcut icon" href="/favicon.ico">
+    <link inertia="favicon-image" rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link inertia="apple-touch-icon" rel="apple-touch-icon" href="/apple-touch-icon.png"> %>
+
+    <%# == Viewport %>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+
+    <%# == Content Security Policy %>
+    <%= csp_meta_tag %>
+
+    <%# == CSRF %>
+    <meta inertia="csrf-param" name="csrf-param" content="<%= request_forgery_protection_token %>">
+    <meta inertia="csrf-token" name="csrf-token" content="<%= form_authenticity_token %>">
+
+    <%# == Environment %>
+    <meta name="env" content="<%= Rails.env %>">
+
+    <%# == Action Cable %>
+    <%= action_cable_meta_tag %>
+
+    <%# == Active Storage %>
+    <meta name="active-storage-direct-uploads-url" content="<%= rails_direct_uploads_path %>">
+    <% if (direct_uploads_size_limit = Rails.configuration.active_storage.direct_uploads_size_limit) %>
+      <meta name="active-storage-direct-uploads-size-limit" content="<%= direct_uploads_size_limit %>">
+    <% end %>
+
+    <%# == Sentry %>
+    <% if Sentry.initialized? %>
+      <% config = Sentry.configuration %>
+      <meta name="sentry-dsn" content="<%= config.dsn %>">
+      <meta name="sentry-traces-sample-rate" content="<%= config.traces_sample_rate %>">
+      <meta name="sentry-profiles-sample-rate" content="<%= config.profiles_sample_rate %>">
+    <% end %>
+
+    <%# == Fullstory %>
+    <% if (settings = Fullstory.settings) %>
+      <meta name="fullstory-org-id" content="<%= settings.org_id %>">
+    <% end %>
+
+    <%# == Amplitude %>
+    <% if (settings = Amplitude.settings) %>
+      <meta name="amplitude-api-key" content="<%= settings.api_key %>">
+    <% end %>
+
+    <%# == Clarity %>
+    <% if (settings = Clarity.settings) %>
+      <meta name="clarity-project-id" content="<%= settings.project_id %>">
+    <% end %>
+
+    <%# == Stale asset handler %>
+    <%# <script>
+      // Reload page if any script from /dist/assets fails to load (404)
+      // This handles cache busting scenarios where HTML is cached but assets have new hashes
+      var hasReloaded = sessionStorage.getItem("asset_reload_attempted");
+
+      // Prevent infinite reload loops - only try once per session
+      if (hasReloaded === "true") {
+        console.error("Asset failed to load after reload attempt. Not retrying to prevent infinite loop.");
+      } else {
+        // Listen for resource loading errors in capture phase (before they reach the target)
+        document.addEventListener("error", function(event) {
+          var target = event.target;
+
+          // Check if the error is from a script
+          if (target.tagName === "SCRIPT") {
+            var url = target.src || target.href;
+
+            // Check if the failed resource is from /dist/assets
+            if (url && url.includes("/dist/assets")) {
+              console.warn("Asset failed to load:", url);
+
+              navigator.serviceWorker.ready.then((registration) => {
+                if (!registration.active) {
+                  return;
+                }
+
+                console.info("Clearing PWA caches...");
+                registration.active.postMessage({
+                  command: "clearCaches",
+                });
+
+                console.info("Reloading page to fetch updated assets...");
+                // Mark that we've attempted a reload
+                sessionStorage.setItem("asset_reload_attempted", "true");
+                // Reload the page
+                window.location.reload();
+              });
+            }
+          }
+        }, true); // Use capture phase to catch errors early
+      }
+    </script> %>
+
+    <%# == Vite %>
+    <%= vite_client_tag %>
+    <% if local_assigns.include?(:page) %>
+      <%= vite_react_refresh_tag %>
+      <%= vite_javascript_tag "application.tsx" %>
+    <% end %>
+
+    <%# == Inertia %>
+    <%== inertia_assets local_assigns.fetch(:page), type: :page, media: nil %>
+
+    <%# == Mantine %>
+    <script data-mantine-script>
+      try {
+        var defaultColorScheme = "auto";
+        var localStorageKey = "mantine-color-scheme-value";
+        var _colorScheme = window.localStorage.getItem(localStorageKey);
+        var colorScheme = _colorScheme === "light" || _colorScheme === "dark" || _colorScheme === "auto" ? _colorScheme : defaultColorScheme;
+        var computedColorScheme = colorScheme !== "auto" ? colorScheme : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        document.documentElement.setAttribute("data-mantine-color-scheme", computedColorScheme);
+      } catch (e) {}
+    </script>
+
+  </head>
+
+  <body>
+    <%# == PWA %>
+    <script>
+      // Capture beforeinstallprompt event
+      window.addEventListener("beforeinstallprompt", (event) => {
+        console.info("Captured beforeinstallprompt event", event);
+        event.preventDefault();
+        window.installPromptEvent = event;
+      });
+
+      // Offer to unregister service worker if application fails to boot
+      if ("serviceWorker" in navigator) {
+        setTimeout(() => {
+          if (window.BOOTED_AT) {
+            return;
+          }
+          var forceReload = confirm("Page failed to load. Force-reload application?");
+          if (!forceReload) {
+            return;
+          }
+          navigator.serviceWorker
+            .getRegistrations()
+            .then((registrations) =>
+              Promise.all(registrations.map(registration => registration.unregister())),
+            )
+            .then(() => {
+              location.reload();
+            });
+        }, 6000);
+      }
+    </script>
+
+    <%# == Content %>
+    <%= yield %>
+  </body>
+</html>

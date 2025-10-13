@@ -1,0 +1,117 @@
+.title {
+  color: light-dark(var(--mantine-color-black), var(--mantine-color-white));
+  videocalloute: 38px;
+  font-weight: 900;
+  line-height: 1.2;
+  text-align: center;
+  text-wrap: balance;
+}
+
+.subtitle {
+  text-align: center;
+  max-width: 380px;
+  font-weight: 500;
+  color: var(--mantine-color-dimmed);
+  margin-inline: auto;
+  font-size: var(--mantine-font-size-xl);
+}
+
+.emph {
+  color: light-dark(
+    var(--mantine-color-primary-7),
+    var(--mantine-color-primary-4)
+  );
+}
+
+.videoContainer {
+  position: relative;
+
+  @mixin smaller-than 680px {
+    margin-top: 36px;
+  }
+}
+
+.video {
+  max-width: 275px;
+  border-radius: var(--mantine-radius-default);
+}
+
+.videoCallout {
+  position: absolute;
+  top: 0;
+  right: -180px;
+  width: fit-content;
+
+  @mixin smaller-than 680px {
+    top: 0px;
+    left: 40px;
+  }
+}
+
+.videoCalloutStack {
+  gap: 0;
+  transform: rotate(8deg);
+
+  @mixin smaller-than 680px {
+    transform: none;
+  }
+}
+
+.videoCalloutArrow {
+  width: 80px;
+  margin-top: 14px;
+  transform: rotate(90deg) scaleY(-1);
+
+  @mixin light {
+    filter: invert(1);
+  }
+
+  @mixin smaller-than 680px {
+    display: none;
+  }
+}
+
+.videoCalloutLabel {
+  font-family: "Single Day", Manrope, cursive;
+  font-size: 24px;
+  line-height: 1.1;
+
+  @mixin dark {
+    color: var(--mantine-color-white);
+  }
+}
+
+.demoWorld {
+  cursor: pointer;
+  margin-top: var(--mantine-spacing-xs);
+  margin-left: 60px;
+
+  @mixin hover {
+    transition: opacity 150ms ease;
+    opacity: 0.8;
+  }
+}
+
+.demoWorldLabel {
+  font-family: "Single Day", Manrope, cursive;
+  font-size: 24px;
+  line-height: 1.1;
+}
+
+.demoWorldArrow {
+  width: 80px;
+
+  @mixin dark {
+    filter: invert(1);
+  }
+}
+
+.demoWorldIcon {
+  box-shadow: var(--mantine-shadow-sm);
+}
+
+.demoWorldName {
+  text-align: center;
+  font-family: var(--mantine-font-family-heading);
+  font-weight: 700;
+}

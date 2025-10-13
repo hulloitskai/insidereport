@@ -1,0 +1,36 @@
+// import {
+//   Identify,
+//   identify,
+//   reset,
+//   setUserId,
+// } from "@amplitude/analytics-browser";
+
+const AmplitudeTracking: FC = () => {
+  // == Current user tracking
+  // useEffect(() => {
+  //   if (currentFriend) {
+  //     setUserId(currentFriend.id);
+  //     const identifyEvent = new Identify();
+  //     identifyEvent.set("name", prettyFriendName(currentFriend));
+  //     identifyEvent.set("type", "friend");
+  //     identify(identifyEvent);
+  //     return () => {
+  //       reset();
+  //     };
+  //   } else if (currentUser) {
+  //     setUserId(currentUser.id);
+  //     const identifyEvent = new Identify();
+  //     identifyEvent.set("name", currentUser.name);
+  //     identifyEvent.set("handle", currentUser.handle);
+  //     identifyEvent.set("type", "user");
+  //     identify(identifyEvent);
+  //     return () => {
+  //       reset();
+  //     };
+  //   }
+  // }, [currentFriend, currentUser]);
+
+  return null;
+};
+
+export default AmplitudeTracking;
