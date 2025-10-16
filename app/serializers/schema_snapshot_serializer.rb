@@ -4,5 +4,7 @@
 class SchemaSnapshotSerializer < ApplicationSerializer
   # == Attributes
   identifier
-  attributes :processed_schema, :company_analysis, :additional_notes
+  attributes :company_analysis,
+             :additional_notes,
+             processed_schema: { type: "Record<string, any>" }
 end

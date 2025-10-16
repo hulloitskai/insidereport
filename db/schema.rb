@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_16_195528) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_16_211315) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -144,11 +144,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_195528) do
   create_table "schema_snapshots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.uuid "project_id", null: false
     t.text "sql_schema", null: false
-    t.text "processed_schema", null: false
     t.text "additional_notes"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "company_analysis"
+    t.jsonb "processed_schema", null: false
     t.index ["project_id"], name: "index_schema_snapshots_on_project_id"
   end
 

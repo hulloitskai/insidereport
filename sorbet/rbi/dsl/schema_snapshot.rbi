@@ -799,16 +799,16 @@ class SchemaSnapshot
     sig { void }
     def id_will_change!; end
 
-    sig { returns(::String) }
+    sig { returns(T.untyped) }
     def processed_schema; end
 
-    sig { params(value: ::String).returns(::String) }
+    sig { params(value: T.untyped).returns(T.untyped) }
     def processed_schema=(value); end
 
     sig { returns(T::Boolean) }
     def processed_schema?; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(T.untyped) }
     def processed_schema_before_last_save; end
 
     sig { returns(T.untyped) }
@@ -817,28 +817,28 @@ class SchemaSnapshot
     sig { returns(T::Boolean) }
     def processed_schema_came_from_user?; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.untyped, T.untyped])) }
     def processed_schema_change; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.untyped, T.untyped])) }
     def processed_schema_change_to_be_saved; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def processed_schema_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(T.untyped) }
     def processed_schema_in_database; end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.untyped, T.untyped])) }
     def processed_schema_previous_change; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def processed_schema_previously_changed?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(T.untyped) }
     def processed_schema_previously_was; end
 
-    sig { returns(T.nilable(::String)) }
+    sig { returns(T.untyped) }
     def processed_schema_was; end
 
     sig { void }
@@ -946,7 +946,7 @@ class SchemaSnapshot
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }
     def saved_change_to_id_value?(from: T.unsafe(nil), to: T.unsafe(nil)); end
 
-    sig { returns(T.nilable([::String, ::String])) }
+    sig { returns(T.nilable([T.untyped, T.untyped])) }
     def saved_change_to_processed_schema; end
 
     sig { params(from: T.untyped, to: T.untyped).returns(T::Boolean) }

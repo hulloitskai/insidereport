@@ -1,4 +1,4 @@
-import { Code, Spoiler, Text } from "@mantine/core";
+import { JsonInput, Spoiler, Text } from "@mantine/core";
 import { type PropsWithChildren } from "react";
 
 import AppLayout from "~/components/AppLayout";
@@ -23,9 +23,19 @@ const ProjectPage: PageComponent<ProjectPageProps> = ({ project }) => {
             <Box>
               <Title order={5}>current schema</Title>
               <SectionSpoiler>
-                <Code block>
-                  {project.current_schema_snapshot.processed_schema}
-                </Code>
+                <JsonInput
+                  autosize
+                  value={JSON.stringify(
+                    project.current_schema_snapshot.processed_schema,
+                    null,
+                    2,
+                  )}
+                  styles={{
+                    input: {
+                      fontSize: "var(--mantine-font-size-xs)",
+                    },
+                  }}
+                />
               </SectionSpoiler>
             </Box>
             <Box>
