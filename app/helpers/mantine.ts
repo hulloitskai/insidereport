@@ -29,6 +29,7 @@ import {
   Typography,
 } from "@mantine/core";
 import { DateInput } from "@mantine/dates";
+import { Dropzone } from "@mantine/dropzone";
 import { RichTextEditor } from "@mantine/tiptap";
 import { type PopoverMiddlewares } from "node_modules/@mantine/core/lib/components/Popover/Popover.types";
 
@@ -321,6 +322,11 @@ const createTheme = (
       ScrollArea: ScrollArea.extend({
         defaultProps: {
           type: "auto",
+        },
+      }),
+      Dropzone: Dropzone.extend({
+        classNames: {
+          root: classes.dropzone,
         },
       }),
     },

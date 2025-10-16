@@ -7,7 +7,7 @@
     "skipLibCheck": true,
 
     // == Mode
-    "moduleResolution": "Bundler",
+    "moduleResolution": "bundler",
     "incremental": true,
     "composite": true,
     "emitDeclarationOnly": true,

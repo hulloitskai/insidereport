@@ -9,7 +9,7 @@
     // == Language
     "module": "ES2022",
     "target": "ES2022",
-    "types": ["node", "vite/client", "unplugin-icons/types/react"],
+    "types": ["vite/client", "unplugin-icons/types/react"],
     "esModuleInterop": true,
     "skipDefaultLibCheck": true /* Skip type checking .d.ts files that are included with TypeScript. */,
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
@@ -39,6 +39,6 @@
     "app/**/*.module.css",
     "typings/**/*.d.ts"
   ],
-  "exclude": ["app/workers/**/*.ts"],
+  "exclude": ["app/workers/**/*.ts", "node_modules/@types/node"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

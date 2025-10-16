@@ -68,15 +68,15 @@ class User < ApplicationRecord
   end
 
   # == Associations
-  has_many :owned_organizations,
-           class_name: "Organization",
+  has_many :owned_projects,
+           class_name: "Project",
            foreign_key: :owner_id,
            inverse_of: :owner,
            dependent: :restrict_with_error
 
-  sig { returns(T.nilable(Organization)) }
-  def primary_organization
-    owned_organizations.chronological.first
+  sig { returns(T.nilable(Project)) }
+  def primary_project
+    owned_projects.chronological.first
   end
 
   # == Normalizations

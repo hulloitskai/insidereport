@@ -1,0 +1,6 @@
+.sectionSpoiler {
+  :global(.mantine-Spoiler-control) {
+    margin-inline: auto;
+    font-size: var(--mantine-font-size-sm);
+  }
+}

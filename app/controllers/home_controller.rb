@@ -5,7 +5,7 @@ class HomeController < ApplicationController
   # == Actions
   # GET /home
   def redirect
-    redirect_to(redirect_path)
+    redirect_to(redirect_path, status: :found)
   end
 
   private
@@ -14,10 +14,10 @@ class HomeController < ApplicationController
   sig { returns(String) }
   def redirect_path
     if (user = current_user)
-      if (organization = user.primary_organization)
-        organization_path(organization)
+      if (project = user.primary_project)
+        project_path(project)
       else
-        new_organization_path
+        new_project_path
       end
     else
       root_path

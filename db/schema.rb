@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_13_032046) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_16_195528) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -131,14 +131,25 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_032046) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
-  create_table "organizations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+  create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
-    t.string "handle", null: false
     t.uuid "owner_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["handle"], name: "index_organizations_on_handle", unique: true
-    t.index ["owner_id"], name: "index_organizations_on_owner_id"
+    t.string "database_url", null: false
+    t.index ["database_url"], name: "index_projects_on_database_url", unique: true
+    t.index ["owner_id"], name: "index_projects_on_owner_id"
+  end
+
+  create_table "schema_snapshots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.text "sql_schema", null: false
+    t.text "processed_schema", null: false
+    t.text "additional_notes"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "company_analysis"
+    t.index ["project_id"], name: "index_schema_snapshots_on_project_id"
   end
 
   create_table "task_records", id: false, force: :cascade do |t|
@@ -170,5 +181,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_13_032046) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "organizations", "users", column: "owner_id"
+  add_foreign_key "projects", "users", column: "owner_id"
+  add_foreign_key "schema_snapshots", "projects"
 end

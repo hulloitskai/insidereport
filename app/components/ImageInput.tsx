@@ -83,7 +83,7 @@ const ImageInput: FC<ImageInputProps> = ({
   }>(routes.images.show, {
     descriptor: "load preview image",
     params: resolvedValue ? { signed_id: resolvedValue.signedId } : null,
-    keepPreviousData: true,
+    revalidateOnFocus: false,
     onSuccess: ({ image }) => {
       if (!image) {
         onChange?.(null);
@@ -100,7 +100,7 @@ const ImageInput: FC<ImageInputProps> = ({
 
   // == Loading
   const [uploading, setUploading] = useState(false);
-  const loading: boolean = uploading || (!!value && !image);
+  const loading: boolean = uploading || (!!resolvedValue && !image);
 
   const inputId = useId();
   const accept = useMemo(() => {
@@ -123,7 +123,7 @@ const ImageInput: FC<ImageInputProps> = ({
       <Box {...{ w, h }} p={4} {...(center && { mx: "auto" })} pos="relative">
         <Image
           className={cn(classes.previewImage, previewClassName)}
-          src={image?.src}
+          src={resolvedValue ? image?.src : undefined}
           {...(image?.srcset && { srcSet: image.srcset })}
           style={[
             { "--dropzone-radius": getRadius(radius), objectFit: previewFit },
@@ -174,7 +174,7 @@ const ImageInput: FC<ImageInputProps> = ({
           pos="absolute"
           inset={0}
           inputProps={{ id: inputId }}
-          mod={{ "with-src": !!image, disabled }}
+          mod={{ "with-src": !!resolvedValue, disabled }}
           {...{ loading, disabled, style }}
         >
           <Stack align="center" gap={4}>
@@ -184,7 +184,7 @@ const ImageInput: FC<ImageInputProps> = ({
             </Text>
           </Stack>
         </Dropzone>
-        {showRemoveButton && !!image && (
+        {showRemoveButton && !!resolvedValue && !loading && (
           <ActionIcon
             className={classes.removeButton}
             variant="subtle"

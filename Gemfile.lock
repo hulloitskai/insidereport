@@ -319,6 +319,8 @@ GEM
       ostruct (>= 0.2)
     oj_serializers (2.0.3)
       oj (>= 3.14.0)
+    openai (0.31.0)
+      connection_pool
     openssl (3.2.0)
     orm_adapter (0.5.0)
     ostruct (0.6.1)
@@ -631,6 +633,7 @@ DEPENDENCIES
   memory_profiler
   multi_json (~> 1.15)
   oj_serializers (~> 2.0)
+  openai (~> 0.31.0)
   pagy (~> 9.2)
   pg (~> 1.5)
   pg_query

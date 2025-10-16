@@ -44,7 +44,6 @@ export const reloadCSRF = (): Promise<PageCSRF> =>
   new Promise((resolve, reject) => {
     router.reload({
       only: ["csrf"],
-      async: true,
       onSuccess: ({ props }) => {
         const { csrf } = props as unknown as SharedPageProps;
         resolve(csrf);

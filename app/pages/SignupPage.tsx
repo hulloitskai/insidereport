@@ -40,7 +40,7 @@ const SignupPage: PageComponent<SignupPageProps> = () => {
       setFieldValue("password_confirmation", "");
     },
     onSuccess: () => {
-      router.visit(routes.organizations.new.path());
+      router.visit(routes.projects.new.path());
     },
   });
 

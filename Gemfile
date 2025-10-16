@@ -162,6 +162,9 @@ gem "devise-argon2", "~> 2.0"
 # Check password strength with StrongPassword
 gem "strong_password", "~> 0.0.10"
 
+# LLM clients
+gem "openai", "~> 0.31.0"
+
 group :development, :test do
   # Debug code with debug
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -230,4 +233,3 @@ group :test do
   gem "capybara-playwright-driver"
   gem "rack-test"
 end
-

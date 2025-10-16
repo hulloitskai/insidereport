@@ -43,7 +43,7 @@ module GeneratedUrlHelpersModule
   def mailcatcher_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def new_organization_url(*args); end
+  def new_project_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_source_url(*args); end
@@ -64,10 +64,10 @@ module GeneratedUrlHelpersModule
   def new_user_session_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def organization_url(*args); end
+  def project_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def organizations_url(*args); end
+  def projects_url(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def rails_blob_representation_proxy_url(*args); end

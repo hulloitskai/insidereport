@@ -43,7 +43,7 @@ module GeneratedPathHelpersModule
   def mailcatcher_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def new_organization_path(*args); end
+  def new_project_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def new_rails_conductor_inbound_email_path(*args); end
@@ -64,10 +64,10 @@ module GeneratedPathHelpersModule
   def new_user_session_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def organization_path(*args); end
+  def project_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
-  def organizations_path(*args); end
+  def projects_path(*args); end
 
   sig { params(args: T.untyped).returns(String) }
   def rails_blob_path(*args); end

@@ -224,4 +224,10 @@
       }
     }
   }
+
+  .dropzone {
+    :global(.mantine-LoadingOverlay-overlay) {
+      border-radius: var(--overlay-radius, var(--dropzone-radius, 0));
+    }
+  }
 }

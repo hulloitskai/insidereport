@@ -8,6 +8,15 @@
 
 - Authentication/Authorization guidance is intentionally omitted here; Devise configuration and controllers define auth behavior in code.
 
+## Core Extensions
+
+- `lib/core_ext.rb` is auto-included throughout the application (loaded in `config/application.rb`).
+- This provides globally available helper methods:
+  - `scoped { ... }` - Execute a block without polluting local scope with variables (alternative to `begin...end`)
+  - `.truthy?` and `.falsy?` - Enhanced boolean checks on various types
+  - `.first!` - Fetch first array element or raise
+  - `.is_any?(*modules)` - Check if object is an instance of any provided modules
+
 ## Library Documentation
 
 - When working with or discussing any external library, gem, or framework (e.g., Devise, React, Rails, etc.), always use Context7 via `mcp_context7_resolve-library-id` and `mcp_context7_get-library-docs` to fetch up-to-date documentation and best practices.

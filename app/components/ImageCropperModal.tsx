@@ -69,6 +69,7 @@ const ImageCropperModalBody: FC<ImageCropperModalBodyProps> = ({
   onCropped,
   onCancelled,
 }) => {
+  const imageRef = useRef<HTMLImageElement>(null);
   const [crop, setCrop] = useState<PercentCrop>({
     x: 0,
     y: 0,
@@ -82,11 +83,15 @@ const ImageCropperModalBody: FC<ImageCropperModalBodyProps> = ({
   // == Jimp
   const [jimpImage, setJimpImage] = useState<JimpInstance>();
   useEffect(() => {
+    const imageEl = imageRef.current;
+    if (!imageEl) {
+      return;
+    }
     void file.arrayBuffer().then(async arrayBuffer => {
       const image = await Jimp.read(arrayBuffer);
       setJimpImage(image);
       if (aspect) {
-        const { width, height } = image;
+        const { width, height } = imageEl.getBoundingClientRect();
         const defaultCrop = centerCrop(
           makeAspectCrop(
             { unit: "%", width: 100, height: 100 },
@@ -112,7 +117,12 @@ const ImageCropperModalBody: FC<ImageCropperModalBodyProps> = ({
         keepSelection
         className={classes.cropper}
       >
-        <Image {...{ src }} mah="75dvh" style={{ pointerEvents: "none" }} />
+        <Image
+          ref={imageRef}
+          {...{ src }}
+          mah="75dvh"
+          style={{ pointerEvents: "none" }}
+        />
       </ReactCrop>
       <Group gap="xs" justify="center">
         <Button
@@ -133,9 +143,13 @@ const ImageCropperModalBody: FC<ImageCropperModalBodyProps> = ({
               })
               .getBuffer("image/png")
               .then(croppedBuffer => {
-                const croppedFile = new File([croppedBuffer], file.name, {
-                  type: "image/png",
-                });
+                const croppedFile = new File(
+                  [croppedBuffer as BlobPart],
+                  file.name,
+                  {
+                    type: "image/png",
+                  },
+                );
                 onCropped(croppedFile);
               })
               .finally(() => {

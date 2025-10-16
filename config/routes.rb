@@ -94,12 +94,12 @@ Rails.application.routes.draw do
     end
   end
 
-  # == Organizations
-  resources :organizations,
+  # == Projects
+  resources :projects,
             only: %i[index create],
             constraints: { format: "json" },
             export: true
-  resources :organizations,
+  resources :projects,
             only: %i[show new],
             constraints: { format: "json" },
             export: true

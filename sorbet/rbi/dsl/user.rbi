@@ -342,18 +342,18 @@ class User
 
   module GeneratedAssociationMethods
     sig { returns(T::Array[T.untyped]) }
-    def owned_organization_ids; end
+    def owned_project_ids; end
 
     sig { params(ids: T::Array[T.untyped]).returns(T::Array[T.untyped]) }
-    def owned_organization_ids=(ids); end
+    def owned_project_ids=(ids); end
 
-    # This method is created by ActiveRecord on the `User` class because it declared `has_many :owned_organizations`.
+    # This method is created by ActiveRecord on the `User` class because it declared `has_many :owned_projects`.
     # 🔗 [Rails guide for `has_many` association](https://guides.rubyonrails.org/association_basics.html#the-has-many-association)
-    sig { returns(::Organization::PrivateCollectionProxy) }
-    def owned_organizations; end
+    sig { returns(::Project::PrivateCollectionProxy) }
+    def owned_projects; end
 
-    sig { params(value: T::Enumerable[::Organization]).void }
-    def owned_organizations=(value); end
+    sig { params(value: T::Enumerable[::Project]).void }
+    def owned_projects=(value); end
   end
 
   module GeneratedAssociationRelationMethods

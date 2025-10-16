@@ -29,8 +29,9 @@ const LoginPage: PageComponent<LoginPageProps> = () => {
     transformValues: values => ({
       user: values,
     }),
-    onError: ({ setFieldValue }) => {
-      setFieldValue("password", "");
+    onFailure: (error, form) => {
+      form.setFieldValue("password", "");
+      form.setFieldError("password", error.message);
     },
     onSuccess: ({ user }) => {
       completeSignIn(user);
