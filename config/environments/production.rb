@@ -6,7 +6,7 @@ require "active_support/core_ext/integer/time"
 # == Canonical URL
 Rails.application.default_url_options = {
   protocol: "https",
-  host: "dailydata.dev",
+  host: "insidereport.dev",
 }
 
 # == Configuration

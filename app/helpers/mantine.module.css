@@ -230,4 +230,22 @@
       border-radius: var(--overlay-radius, var(--dropzone-radius, 0));
     }
   }
+
+  .spoilerContent {
+    position: relative;
+
+    .spoilerControl[aria-expanded="false"] ~ &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 44px;
+      background: linear-gradient(
+        to bottom,
+        transparent,
+        var(--mantine-color-body)
+      );
+    }
+  }
 }

@@ -6,7 +6,7 @@ class ProjectsController < ApplicationController
   before_action :authenticate_user!
 
   # == Actions
-  # GET /organizations
+  # GET /projects
   def index
     user = authenticate_user!
     projects = user.owned_projects.chronological

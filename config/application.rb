@@ -10,7 +10,7 @@ require "rails/all"
 Bundler.require(*Rails.groups)
 
 # == Configuration
-module DailyData
+module InsideReport
   extend T::Sig
 
   class Application < Rails::Application

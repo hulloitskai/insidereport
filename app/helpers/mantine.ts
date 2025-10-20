@@ -23,6 +23,7 @@ import {
   PinInput,
   Popover,
   ScrollArea,
+  Spoiler,
   Text,
   TextInput,
   ThemeIcon,
@@ -327,6 +328,12 @@ const createTheme = (
       Dropzone: Dropzone.extend({
         classNames: {
           root: classes.dropzone,
+        },
+      }),
+      Spoiler: Spoiler.extend({
+        classNames: {
+          control: classes.spoilerControl,
+          content: classes.spoilerContent,
         },
       }),
     },

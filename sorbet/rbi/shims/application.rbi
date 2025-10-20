@@ -2,7 +2,7 @@
 
 module Rails
   class << self
-    sig { returns(DailyData::Application) }
+    sig { returns(InsideReport::Application) }
     def application; end
   end
 end

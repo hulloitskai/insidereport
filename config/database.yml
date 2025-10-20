@@ -28,14 +28,14 @@ local: &local
 
 development:
   <<: *local
-  database: dailydata_development
+  database: insidereport_development
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
 # Do not set this db to the same as development or production.
 test:
   <<: *local
-  database: dailydata_test
+  database: insidereport_test
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is
@@ -59,6 +59,6 @@ test:
 #
 production:
   adapter: *adapter
-  database: dailydata_production
+  database: insidereport_production
   url: <%= Rails.application.credentials.database!.url if Rails.env.production? && Rails.application.credentials_available? %>
   reaping_frequency: 10

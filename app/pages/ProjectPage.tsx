@@ -1,5 +1,4 @@
 import { JsonInput, Spoiler, Text } from "@mantine/core";
-import { type PropsWithChildren } from "react";
 
 import AppLayout from "~/components/AppLayout";
 import { type Project } from "~/types";
@@ -12,7 +11,7 @@ export interface ProjectPageProps extends SharedPageProps {
 
 const ProjectPage: PageComponent<ProjectPageProps> = ({ project }) => {
   return (
-    <Stack gap="xl">
+    <Stack gap="xs">
       <Box>
         <Badge>project</Badge>
         <Title fw={900}>{project.name}</Title>
@@ -42,15 +41,9 @@ const ProjectPage: PageComponent<ProjectPageProps> = ({ project }) => {
               <Title order={5}>company analysis</Title>
               {project.current_schema_snapshot.company_analysis ? (
                 <SectionSpoiler>
-                  <Box
-                    p="xs"
-                    bg="gray.0"
-                    style={{ borderRadius: "var(--mantine-radius-sm)" }}
-                  >
-                    <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
-                      {project.current_schema_snapshot.company_analysis}
-                    </Text>
-                  </Box>
+                  <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+                    {project.current_schema_snapshot.company_analysis}
+                  </Text>
                 </SectionSpoiler>
               ) : (
                 <LoadingCompanyAnalysis />
@@ -61,6 +54,41 @@ const ProjectPage: PageComponent<ProjectPageProps> = ({ project }) => {
           <Box>
             <Title order={5}>current schema</Title>
             <LoadingSchemaSnapshot />
+          </Box>
+        )}
+        {!isEmpty(project.reporters) && (
+          <Box>
+            <Title order={5}>reporters</Title>
+            <Stack gap="xs">
+              {project.reporters.map(reporter => (
+                <Card key={reporter.id} withBorder>
+                  <Stack gap={8}>
+                    <Group justify="space-between">
+                      <Text ff="heading" fw={600}>
+                        {reporter.name}
+                      </Text>
+                      <Badge>{reporter.role}</Badge>
+                    </Group>
+                    <Box>
+                      <Text ff="heading" fw={500} size="sm">
+                        personality
+                      </Text>
+                      <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+                        {reporter.personality}
+                      </Text>
+                    </Box>
+                    <Box>
+                      <Text ff="heading" fw={500} size="sm">
+                        journalistic approach
+                      </Text>
+                      <Text size="sm" style={{ whiteSpace: "pre-wrap" }}>
+                        {reporter.journalistic_approach}
+                      </Text>
+                    </Box>
+                  </Stack>
+                </Card>
+              ))}
+            </Stack>
           </Box>
         )}
       </Stack>
@@ -86,7 +114,7 @@ const LoadingSchemaSnapshot: FC = () => {
       router.reload({
         only: ["project"],
       });
-    }, 1000);
+    }, 2000);
     return () => {
       clearInterval(interval);
     };
@@ -128,15 +156,13 @@ const LoadingCompanyAnalysis: FC = () => {
   );
 };
 
-const SectionSpoiler: FC<PropsWithChildren> = ({ children }) => {
-  return (
-    <Spoiler
-      maxHeight={240}
-      showLabel="show more"
-      hideLabel="show less"
-      className={classes.sectionSpoiler}
-    >
-      {children}
-    </Spoiler>
-  );
-};
+const SectionSpoiler: FC<PropsWithChildren> = ({ children }) => (
+  <Spoiler
+    maxHeight={240}
+    showLabel="show more"
+    hideLabel="show less"
+    className={classes.sectionSpoiler}
+  >
+    {children}
+  </Spoiler>
+);

@@ -30,6 +30,7 @@ class Project < ApplicationRecord
   # == Associations
   belongs_to :owner, class_name: "User", inverse_of: :owned_projects
   has_many :schema_snapshots, dependent: :destroy
+  has_many :reporters, dependent: :destroy
 
   sig { returns(T.nilable(SchemaSnapshot)) }
   def current_schema_snapshot
@@ -54,14 +55,15 @@ class Project < ApplicationRecord
     dumper.dump
   end
 
-  sig { returns(SchemaSnapshot) }
-  def snapshot_schema!
+  sig { params(force: T::Boolean).returns(SchemaSnapshot) }
+  def snapshot_schema!(force: false)
     sql_schema = dump_schema
-    if (current_schema = current_schema_snapshot) &&
+    if !force &&
+        (current_schema = current_schema_snapshot) &&
         current_schema.sql_schema == sql_schema
       current_schema
     else
-      processed_schema = SchemaSnapshot.process_schema(sql_schema)
+      processed_schema = SchemaSnapshot.process_schema(sql_schema, sql_conn:)
       schema_snapshots.create!(sql_schema:, processed_schema:)
     end
   end
@@ -69,6 +71,31 @@ class Project < ApplicationRecord
   sig { void }
   def snapshot_schema_later
     SnapshotProjectSchemaJob.perform_later(self)
+  end
+
+  # == Reporters
+  sig { params(force: T::Boolean).returns(T::Array[Reporter]) }
+  def generate_reporters!(force: false)
+    if !force && (reporters = reporters.to_a.presence)
+      return reporters
+    end
+
+    company_analysis = current_schema_snapshot&.company_analysis or
+      raise "Missing company analysis"
+
+    response = OpenaiService.generate_response(
+      prompt: {
+        id: "pmpt_68f298c889e0819796a2a08c3d751ee10bc0ca3c851a79d9",
+        variables: {
+          company_analysis:,
+        },
+      },
+    )
+    output_text = OpenaiService.output_text!(response)
+    result = JSON.parse(output_text)
+    self.reporters = result.fetch("company_reporters").map do |attributes|
+      Reporter.new(**attributes)
+    end
   end
 
   # == Methods
@@ -97,10 +124,14 @@ class Project < ApplicationRecord
     end
   end
 
+  sig { returns(ReadonlySqlConnection) }
+  def sql_conn
+    ReadonlySqlConnection.new(database_url)
+  end
+
   sig { params(sql: String, safeguard_output: T::Boolean).returns(String) }
   def execute_sql(sql, safeguard_output: false)
-    conn = ReadonlySqlConnection.new(database_url)
-    conn.execute_sql(sql, safeguard_output:)
+    sql_conn.execute_sql(sql, safeguard_output:)
   end
 
   private

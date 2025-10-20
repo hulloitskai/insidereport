@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_10_16_211315) do
+ActiveRecord::Schema[8.0].define(version: 2025_10_17_195420) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -131,6 +131,19 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_211315) do
     t.index ["scheduled_at"], name: "index_good_jobs_on_scheduled_at", where: "(finished_at IS NULL)"
   end
 
+  create_table "investigations", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.uuid "reporter_id", null: false
+    t.text "research_goal", null: false
+    t.text "research_strategy", null: false
+    t.text "research_findings", null: false
+    t.tstzrange "period", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_investigations_on_project_id"
+    t.index ["reporter_id"], name: "index_investigations_on_reporter_id"
+  end
+
   create_table "projects", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
     t.string "name", null: false
     t.uuid "owner_id", null: false
@@ -139,6 +152,18 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_211315) do
     t.string "database_url", null: false
     t.index ["database_url"], name: "index_projects_on_database_url", unique: true
     t.index ["owner_id"], name: "index_projects_on_owner_id"
+  end
+
+  create_table "reporters", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
+    t.uuid "project_id", null: false
+    t.string "name", null: false
+    t.string "role", null: false
+    t.text "personality", null: false
+    t.text "journalistic_approach", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["project_id"], name: "index_reporters_on_project_id"
+    t.index ["role", "project_id"], name: "index_reporters_on_role_and_project_id", unique: true
   end
 
   create_table "schema_snapshots", id: :uuid, default: -> { "gen_random_uuid()" }, force: :cascade do |t|
@@ -181,6 +206,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_10_16_211315) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "investigations", "projects"
+  add_foreign_key "investigations", "reporters"
   add_foreign_key "projects", "users", column: "owner_id"
+  add_foreign_key "reporters", "projects"
   add_foreign_key "schema_snapshots", "projects"
 end

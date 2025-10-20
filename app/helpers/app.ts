@@ -1,3 +1,3 @@
-export const CANONICAL_DOMAIN = "dailydata.dev";
-export const APP_NAME = "daily data";
+export const CANONICAL_DOMAIN = "insidereport.dev";
+export const APP_NAME = "inside report";
 export const APP_DESCRIPTION = "";

@@ -19,7 +19,7 @@ class SchemaDumper
 
     case uri.scheme
     when "postgres", "postgresql", "postgis"
-      dump_postgresql(uri)
+      dump_postgres(uri)
     when "mysql", "mysql2"
       dump_mysql(uri)
     else
@@ -30,7 +30,7 @@ class SchemaDumper
   private
 
   sig { params(uri: URI::Generic).returns(String) }
-  def dump_postgresql(uri)
+  def dump_postgres(uri)
     cmd = [
       "pg_dump",
       "--schema-only",
@@ -59,19 +59,28 @@ class SchemaDumper
       path[1..] || ""
     end
 
+    host = uri.host or raise "Missing host"
+    user = uri.user or raise "Missing user"
+    password = uri.password or raise "Missing password"
+
     cmd = [
       "mysqldump",
       "--no-data",
       "--skip-add-drop-table",
       "--compact",
-      "--host=#{uri.host}",
-      "--port=#{uri.port || 3306}",
-      "--user=#{uri.user}",
-      "--password=#{uri.password}",
-      database,
+      "--host",
+      host,
+      "--user",
+      user,
+      "--password",
+      password,
     ]
+    if (port = uri.port)
+      cmd += ["--port", port.to_s]
+    end
+    cmd += ["--", database]
 
-    stdout, stderr, status = Open3.capture3(*cmd)
+    stdout, stderr, status = Open3.capture3(*T.unsafe(cmd))
     raise "`mysqldump' failed: #{stderr}" unless status.success?
 
     stdout

@@ -63,20 +63,23 @@ class SchemaSnapshot < ApplicationRecord
   end
 
   # == Helpers
-  sig { params(sql_schema: String).returns(T::Hash[String, T.untyped]) }
-  def self.process_schema(sql_schema)
-    response = OpenaiService.generate_response(
+  sig do
+    params(
+      sql_schema: String,
+      sql_conn: ReadonlySqlConnection,
+    ).returns(T::Hash[String, T.untyped])
+  end
+  def self.process_schema(sql_schema, sql_conn:)
+    response = OpenaiService.generate_response_with_database_tools(
       prompt: {
-        id: "pmpt_68ed772586c081979e135f328fb3ba1b0134039ddf26db29",
+        id: "pmpt_68f28a5c49b881909fb4756c9b759e030e49e84b8701ac7c",
         variables: {
           sql_schema:,
         },
       },
+      sql_conn:,
     )
-    output_text = OpenaiService.output_text(response) or raise "No output"
-    tag_logger("process_schema") do
-      logger.debug("OpenAI response: #{output_text.inspect}")
-    end
+    output_text = OpenaiService.output_text!(response)
     JSON.parse(output_text)
   end
 
@@ -86,57 +89,16 @@ class SchemaSnapshot < ApplicationRecord
   sig { returns(String) }
   def generate_company_analysis
     project = project!
-
-    # Initial request
-    prompt = {
-      id: "pmpt_68eeba25f4a081958b0782afd91919ae0c6bb2c047ce2e0d",
-      variables: {
-        sql_dialect: project.sql_dialect,
-        schema: processed_schema.to_s,
+    response = OpenaiService.generate_response_with_database_tools(
+      prompt: {
+        id: "pmpt_68f28d3c8d988196a72877330f2b5ef70e0692431e203b7a",
+        variables: {
+          sql_dialect: project.sql_dialect,
+          schema: processed_schema.to_s,
+        },
       },
-    }
-    response = OpenaiService.generate_response(prompt:)
-
-    # Keep handling tool calls until we get a text response
-    loop do
-      text_response = T.let(nil, T.nilable(String))
-      sql_outputs = T.let(
-        [],
-        T::Array[OpenAI::Responses::ResponseInputItem::FunctionCallOutput],
-      )
-
-      response.output.each do |item|
-        if item.is_a?(OpenAI::Responses::ResponseOutputMessage)
-          text_response = item.content.filter_map do |content|
-            if content.is_a?(OpenAI::Responses::ResponseOutputText)
-              content.text
-            end
-          end.join(" ")
-        elsif item.is_a?(OpenAI::Responses::ResponseFunctionToolCall)
-          parsed_arguments = JSON.parse(item.arguments)
-          query = parsed_arguments.fetch("query")
-          output = project.execute_sql(query, safeguard_output: true)
-          sql_outputs <<
-            OpenAI::Responses::ResponseInputItem::FunctionCallOutput.new(
-              call_id: item.call_id,
-              output:,
-            )
-        end
-      end
-
-      if sql_outputs.empty?
-        if text_response.present?
-          break text_response
-        else
-          raise "No text response and no tool call outputs to respond with"
-        end
-      else
-        response = OpenaiService.generate_response(
-          prompt:,
-          previous_response_id: response.id,
-          input: sql_outputs,
-        )
-      end
-    end
+      sql_conn: project.sql_conn,
+    )
+    OpenaiService.output_text!(response)
   end
 end

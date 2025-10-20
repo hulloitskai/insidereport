@@ -55,7 +55,7 @@ const EmailLayout = <EmailProps extends SharedPageProps>({
                     target="_blank"
                     style={{ fontWeight: 600 }}
                   >
-                    daily data
+                    inside report
                   </Link>
                   . this email loves you.
                 </Text>

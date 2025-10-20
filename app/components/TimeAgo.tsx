@@ -18,7 +18,7 @@ const TimeAgo: FC<TimeAgoProps> = ({ children, ...otherProps }) => {
   useEffect(() => {
     const interval = setInterval(() => {
       setText(formatTimeAgo(date));
-    }, 1000);
+    }, 2000);
     return () => {
       clearInterval(interval);
     };
